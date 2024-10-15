@@ -1,0 +1,5 @@
+# ignore ALL .csv files
+*.csv
+#ignore folders
+book_images/
+CSV_files/
