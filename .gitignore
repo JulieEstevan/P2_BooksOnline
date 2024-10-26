@@ -4,3 +4,4 @@
 book_images/
 CSV_files/
 env/
+__pycache__/
