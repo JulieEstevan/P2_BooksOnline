@@ -8,6 +8,6 @@ Environnement d'utilisation :
 Windows 10 - Python 3.13.0
 
 Instructions d'utilisation :
-    1 - Téléchargez le repo et le placer dans un dossier
-    2 - Installer les dépendances Python nécessaire à ce projet avec la commande : python -m pip install -r requirement.txt
-    3 - Executer le programme avec la commande : python index.py
+1 - Téléchargez le repo et le placer dans un dossier
+2 - Installer les dépendances Python nécessaire à ce projet avec la commande : python -m pip install -r requirement.txt
+3 - Executer le programme avec la commande : python index.py
