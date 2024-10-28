@@ -10,7 +10,37 @@ def get_soup(url):
     response = requests.get(url)
     page = response.content
     soup = BeautifulSoup(page, "html.parser")
+
     return soup
+
+#Get all categories URLs
+def get_categories():
+    soup = get_soup("https://books.toscrape.com/index.html")
+    list = soup.select("ul.nav-list li ul li a")
+    categories = []
+    for href in list:
+        url = f"https://books.toscrape.com/{href["href"].replace("index.html", "")}"
+        categories.append(url)
+    
+    return categories
+
+#Get all pages per category
+def get_pages(category_url):
+    category_pages = []
+    page = 1
+    while True : 
+        url = f"{category_url}page-{str(page)}.html"
+        if 'page-1.html' in url :
+            url = url.replace('page-1.html', 'index.html') 
+        response = requests.get(url)
+        if response.status_code == 200:
+            category_pages.append(url)
+            page += 1
+        else:
+            page = 1
+            break
+    
+    return category_pages
 
 #Get all books from a page
 def get_books(page_url):
@@ -21,11 +51,6 @@ def get_books(page_url):
         books.append(f"https://books.toscrape.com/catalogue/{(book["href"]).strip("../")}")
 
     return books
-
-#Get all pages per category
-def get_pages(category_path):
-    category_pages = []
-
 
 #Get book data
 def get_book_data(book_url):
@@ -75,7 +100,11 @@ def get_book_data(book_url):
         rating = f"{str_to_num[rating_num[1]]} out of 5"
 
         #Book Description
-        description = soup.find("p", class_= None).string
+        description = soup.find("p", class_= None)
+        if description == None:
+            description = "No description"
+        else:
+            description = description.string
         description = re.sub("[^a-zA-Z0-9 \n \'.' \'()']", '', description)
 
         #Book UPC
@@ -111,4 +140,19 @@ def create_csv_file(category_name, book_data):
         writer = csv.writer(csv_file, delimiter=",")
         csv_header = ["Product URL", "UPC", "Title", "Price incl. taxes", "Price excl. taxes", "Availability", "Description", "Category", "Rating", "Image URL"]
         writer.writerow(csv_header)
-        writer.writerow(book_data)
+        writer.writerows(book_data)
+
+#Combining function to scrap all product on BooksToScrap
+def scrap_all():
+    categories = get_categories()
+    for category in categories:
+        pages = get_pages(category)
+        book_data = []
+        for page in pages:
+            books = get_books(page)
+            for book_url in books:
+                book_info = get_book_data(book_url)
+                category = book_info[0]
+                book_data.append(book_info[1])           
+        create_csv_file(category, book_data)
+scrap_all()
