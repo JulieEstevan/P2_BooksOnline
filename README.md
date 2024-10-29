@@ -10,5 +10,12 @@ Environnement d'utilisation :
 
 Instructions d'utilisation :
 - Téléchargez le repo et le placer dans un dossier
-- Installer les dépendances Python nécessaire à ce projet avec la commande : python -m pip install -r requirement.txt
-- Executer le programme avec la commande : python index.py
+- Installer les dépendances Python nécessaire à ce projet avec la commande : 
+```bash
+python -m pip install -r requirement.txt
+```
+- Executer le programme avec la commande : 
+```bash
+python main.py
+```
+
